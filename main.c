@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "Turing.h"
 
-#define SEPARATOR '&'
+#define SEPARATOR '$'
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
@@ -37,11 +37,13 @@ int main(int argc, char *argv[]) {
 	while(1) {
 		char d;
 		PrintTape(t);
+		printf("\n\n%d\n\n",ReadCoded(t));
 		scanf("%c",&d);
 		if(d == '>')
 			DoubleRight(t);
 		else if (d == '<')
 			DoubleLeft(t);
+		
 		system("cls");
 	}
 	
@@ -69,6 +71,29 @@ void WriteTapeToCoded (TuringMachine * tm, char * numbers, int size) {
 		}
 		
 	}
+}
+
+int ReadCoded(TuringMachine * tm) {
+	int bits[2];
+	
+	bits[0] = Read(tm);
+	MoveHeadRight(tm);
+	
+	bits[1] = Read(tm);
+	MoveHeadLeft(tm);
+	
+	if(bits[0] == 0) {
+		if(bits[1] == 1) {
+			return 1;
+		} else {
+			return 0;
+		}
+	} else {
+		if(bits[1] == 0) {
+			return SEPARATOR;
+		}
+	}
+	
 }
 
 void DoubleLeft (TuringMachine *  tm) {

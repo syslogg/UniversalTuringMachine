@@ -7,6 +7,7 @@
 #define BLANK 254
 
 struct machineturing {
+	int state;
 	int tape[TAM_MAX];
 	int head;
 };
@@ -14,6 +15,7 @@ struct machineturing {
 TuringMachine * Create() {
 	TuringMachine * tm = (TuringMachine *) malloc(sizeof(TuringMachine));
 	tm->head = TAM_MAX/2;
+	tm->state = 0;
 	
 	int i;
 	for(i = 0; i < TAM_MAX; i++) {
