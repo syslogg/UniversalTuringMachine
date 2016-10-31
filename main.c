@@ -22,21 +22,35 @@
 
 int main(int argc, char *argv[]) {
 	
+	FILE * turing = fopen("TM/turing.txt","r");
+	FILE * transition = fopen("TM/transitions.txt","r");
 	
 	TuringMachine * t = Create();
+	char c;
+	while((c = fgetc(turing)) != EOF) {
+		MoveWriteHeadRight(t,c);
+	}
+	while((c = fgetc(transition)) != EOF) {
+		if(c == '\n') {
+			MoveWriteHeadRight(t,SEP_TRANS);
+			MoveWriteHeadRight(t,SEP_TRANS);
+		} else {
+			MoveWriteHeadRight(t,c);
+		}
+		
+	}
+	MoveWriteHeadRight(t,SEPARATOR);
 	
-	char ta[6];
+	//Processar input
+	print("Digite um INPUT de acordo com o alfabeto ()");
 	
-	ta[0] = '1';
-	ta[1] = '0';
-	ta[2] = SEPARATOR;
-	ta[3] = '0';
-	ta[4] = '1';
-	ta[5] = SEP_TRANS;
+	//ResetHead(t);
 	
 	
-	LoadData(t,ta,sizeof(ta));
-	printf("%d",sizeof(ta));
+	
+	//Debug
+	//LoadData(t,ta,sizeof(ta));
+	//printf("%d",sizeof(ta));
 	while(1) {
 		char d;
 		PrintTape(t);
