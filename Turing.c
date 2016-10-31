@@ -5,10 +5,12 @@
 #define TAM_MAX 500
 #define RANGE_TAPE 10
 #define BLANK 254
+#define SEPARATOR '$'
+#define SEP_TRANS '&'
 
 struct machineturing {
 	int state;
-	int tape[TAM_MAX];
+	char tape[TAM_MAX];
 	int head;
 };
 /*----------- Create -----------*/
@@ -26,8 +28,8 @@ TuringMachine * Create() {
 }
 
 /*----------- Comands -----------*/
-void LoadData(TuringMachine * tm, int * data, int data_size) {
-	int head = tm->head, i, lenght = data_size/sizeof(int);
+void LoadData(TuringMachine * tm, char * data, int data_size) {
+	int head = tm->head, i, lenght = data_size;
 	ClearTape(tm);
 	
 	for(i = 0; i < lenght; i++){
@@ -57,20 +59,20 @@ void MoveHeadRight (TuringMachine *  tm) {
 }
 
 
-void MoveWriteHeadLeft (TuringMachine * tm, int value) {
+void MoveWriteHeadLeft (TuringMachine * tm, char value) {
 	tm->tape[tm->head--] = value;
 }
 
-void MoveWriteHeadRight (TuringMachine * tm, int value) {
+void MoveWriteHeadRight (TuringMachine * tm, char value) {
 	tm->tape[tm->head++] = value;
 }
 
 /*----------- Operations -----------*/
-int Read(TuringMachine * tm) {
+char Read(TuringMachine * tm) {
 	return tm->tape[tm->head];
 }
 
-void Write(TuringMachine * tm, int value) {
+void Write(TuringMachine * tm, char value) {
 	tm->tape[tm->head] = (value != 1 && value != 0 && value != BLANK ? tm->tape[tm->head] : value);
 }
 
@@ -79,20 +81,15 @@ void PrintTape(TuringMachine * tm) {
 	int i;
 	printf("\n[ ");
 	for (i = tm->head-RANGE_TAPE; i <= tm->head+RANGE_TAPE; i++) {
-		
-		if(tm->tape[i] != BLANK) {
-			if(tm->head != i)
-				printf("%d ", tm->tape[i]);
-			else
-				printf("|%d| ",tm->tape[i]);
-		} else {
-			if(tm->head != i)
-				printf("%c ", tm->tape[i]);
-			else
-				printf("|%c| ",tm->tape[i]);
-		}
-		
+		if(tm->head != i)
+			printf("%c ", tm->tape[i]);
+		else
+			printf("|%c| ",tm->tape[i]);
 	}
 	printf("]\n\n");
+	
+}
+
+void Encode(TuringMachine * tm) {
 	
 }
