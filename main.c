@@ -20,7 +20,9 @@
 
 int main(int argc, char *argv[]) {
 	
+	printf("Teste");
 	
+	/*
 	TuringMachine * t = Create();
 	
 	char ta[5];
@@ -51,7 +53,7 @@ int main(int argc, char *argv[]) {
 	
 	
 	getchar();
-	
+	*/
 	return 0;
 }
 
