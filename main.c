@@ -16,20 +16,50 @@
 		-- Example
 			- 10$01
 			- 01 00 10 00 01
+    -- Mapping
+    	- a to 00001
+    	- b to 00010
+    	- c to 00011
+    	- d to 00100
+    	- e to 00101
+    	- f to 00110
+    	- g to 00111
+    	- h to 01000
+    	- i to 01001
+    	- j to 0
+    	- l to 00000
+    	- m to 00000
+    	- n to 00000
+    	- o to 00000
+    	- p to 00000
+    	- q to 00000
+    	- r to 00000
+    	- s to 00000
+    	- a to 00000
+    	- a to 00000
 		
-	
+	-- Tape form
+		- Transition: EstadoAtual&Entrada&EstadoDest&Escreve&Direcao
+			-- Direction:
+				- Left:  00;
+				- Right: 01;
+				- Halt:  11;
+		- TM Config: Estados$Alfabeto 
+
 */
 
 int main(int argc, char *argv[]) {
-	
-<<<<<<< HEAD
-	printf("Teste");
-=======
+
 	FILE * turing = fopen("TM/turing.txt","r");
 	FILE * transition = fopen("TM/transitions.txt","r");
->>>>>>> e926a44bd4b3e2ce4f7638ef2d17c06aa4a77044
 	
-	/*
+	//Mapping
+	int mapping[256], a = 'a', z = 'z', i;
+	for(i = a; i <= z; i++) {
+		mapping[i] = i - a;
+	}
+	
+	
 	TuringMachine * t = Create();
 	char c;
 	while((c = fgetc(turing)) != EOF) {
@@ -47,7 +77,7 @@ int main(int argc, char *argv[]) {
 	MoveWriteHeadRight(t,SEPARATOR);
 	
 	//Processar input
-	print("Digite um INPUT de acordo com o alfabeto ()");
+	printf("Digite um INPUT de acordo com o alfabeto ()");
 	
 	//ResetHead(t);
 	
@@ -73,7 +103,7 @@ int main(int argc, char *argv[]) {
 	
 	
 	getchar();
-	*/
+	
 	return 0;
 }
 
