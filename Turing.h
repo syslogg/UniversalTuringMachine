@@ -5,19 +5,20 @@ typedef struct machineturing TuringMachine;
 TuringMachine * Create();
 
 //Commands
-void LoadData(TuringMachine * tm, int * data, int data_size);
+void LoadData(TuringMachine * tm, char * data, int data_size);
 void ResetHead(TuringMachine * tm);
 void ClearTape(TuringMachine * tm);
 
 //Moving
 void MoveHeadLeft (TuringMachine *  tm);
 void MoveHeadRight (TuringMachine *  tm);
-void MoveWriteHeadLeft(TuringMachine * tm, int value);
-void MoveWriteHeadRight(TuringMachine * tm, int value);
+
+void MoveWriteHeadLeft(TuringMachine * tm, char value);
+void MoveWriteHeadRight(TuringMachine * tm, char value);
 
 //Operation
-int Read(TuringMachine * tm);
-void Write(TuringMachine * tm, int value);
+char Read(TuringMachine * tm);
+void Write(TuringMachine * tm, char value);
 
 //Print
 void PrintTape(TuringMachine * tm);
