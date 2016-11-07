@@ -41,10 +41,10 @@
 	-- Tape form
 		- Transition: EstadoAtual&Entrada&EstadoDest&Escreve&Direcao
 			-- Direction:
-				- Left:  00;
-				- Right: 01;
-				- Halt:  11;
-		- TM Config: Estados$Alfabeto 
+				- <:  00;
+				- >:  01;
+				- H:  11;
+		- TM Config: Estados$Alfabeto
 
 */
 
@@ -77,15 +77,19 @@ int main(int argc, char *argv[]) {
 	MoveWriteHeadRight(t,SEPARATOR);
 	
 	//Processar input
-	printf("Digite um INPUT de acordo com o alfabeto ()");
+	printf("Digite um INPUT de acordo com o alfabeto configurado: \n");
 	
-	//ResetHead(t);
+	char input[64];
 	
+	scanf("%s",input);
 	
+	for(i = 0; i < strlen(input); i++) {
+		MoveWriteHeadRight(t,input[i]);
+	}
+	MoveWriteHeadRight(t,SEPARATOR);
 	
 	//Debug
-	//LoadData(t,ta,sizeof(ta));
-	//printf("%d",sizeof(ta));
+
 	while(1) {
 		char d;
 		PrintTape(t);
