@@ -5,6 +5,8 @@
 #define SEPARATOR '$'
 #define SEP_TRANS '&'
 
+#define MAX_VARIABLE 64
+
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 /* -- Codification:
@@ -79,7 +81,7 @@ int main(int argc, char *argv[]) {
 	//Processar input
 	printf("Digite um INPUT de acordo com o alfabeto configurado: \n");
 	
-	char input[64];
+	char input[MAX_VARIABLE];
 	
 	scanf("%s",input);
 	
@@ -88,22 +90,43 @@ int main(int argc, char *argv[]) {
 	}
 	MoveWriteHeadRight(t,SEPARATOR);
 	
-	//Debug
-
-	while(1) {
-		char d;
-		PrintTape(t);
-		
-		scanf("%c",&d);
-		if(d == '>')
-			MoveHeadRight(t);
-		else if (d == '<')
-			MoveHeadLeft(t);
-		
-		system("cls");
-	}
+	//Reset Head
+	ResetHead(t);
 	
-
+	
+	//Divide info
+	
+	//Variable
+	char states[MAX_VARIABLE];
+	char alfa [MAX_VARIABLE];
+	
+	//States
+	
+	i = 0;
+	
+	while (Read(t) != SEPARATOR) {
+		states[i] = Read(t);
+		MoveHeadRight(t);
+		i++;
+	}
+	states[i] = '\0';
+	
+	//printf("%s",states);
+	MoveHeadRight(t);
+	
+	//Divide alfa
+	
+	i = 0;
+	while (Read(t) != SEP_TRANS) {
+		alfa[i] = Read(t);
+		MoveHeadRight(t);
+		i++;
+	}
+	alfa[i] = '\0';
+	printf("%s",alfa);
+	
+	//Debug(t);
+	
 	
 	
 	getchar();
@@ -111,7 +134,22 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-
+void Debug (TuringMachine * tm) {
+	//Debug
+	while(1) {
+		char d;
+		PrintTape(tm);
+		
+		scanf("%c",&d);
+		if(d == '>')
+			MoveHeadRight(tm);
+		else if (d == '<')
+			MoveHeadLeft(tm);
+		
+		system("cls");
+	}
+	
+}
 
 
 
