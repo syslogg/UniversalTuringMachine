@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "Turing.h"
 
-#define TAM_MAX 500
+#define TAM_MAX 1000
 #define RANGE_TAPE 10
 #define BLANK 254
 #define SEPARATOR '$'

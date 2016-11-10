@@ -7,6 +7,10 @@
 
 #define MAX_VARIABLE 64
 
+#define bool int
+#define true 1
+#define false 0
+
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 /* -- Codification:
@@ -49,11 +53,26 @@
 		- TM Config: Estados$Alfabeto
 
 */
+struct transition {
+	char EstAtual[MAX_VARIABLE];
+	char IAtual[MAX_VARIABLE];
+	char Escr[MAX_VARIABLE];
+	char ProxState[MAX_VARIABLE];
+	char Dir[MAX_VARIABLE];
+};
+typedef struct transition Transition;
 
 int main(int argc, char *argv[]) {
 
 	FILE * turing = fopen("TM/turing.txt","r");
 	FILE * transition = fopen("TM/transitions.txt","r");
+	FILE * transition2 = fopen("TM/transitions.txt", "r");
+	
+	//Variable
+	char states[MAX_VARIABLE];
+	char alfa[MAX_VARIABLE];
+	Transition trans[MAX_VARIABLE];
+	
 	
 	//Mapping
 	int mapping[256], a = 'a', z = 'z', i;
@@ -67,6 +86,24 @@ int main(int argc, char *argv[]) {
 	while((c = fgetc(turing)) != EOF) {
 		MoveWriteHeadRight(t,c);
 	}
+	
+	
+	//Aloca na variavel as transições
+	i = 0;
+	char buffer[MAX_VARIABLE], a1[MAX_VARIABLE], a2[MAX_VARIABLE], a3[MAX_VARIABLE], a4[MAX_VARIABLE], a5[MAX_VARIABLE];
+	while(fgets(buffer,sizeof(buffer),transition2) != NULL ) {
+		sscanf(buffer, "%[^'&']&%[^'&']&%[^'&']&%[^'&']&%s\n",a1,a2,a3,a4,a5); //0&s&d&1&>
+		
+		strcpy(trans[i].EstAtual,a1); //EstadoAtual&Entrada&EstadoDest&Escreve&Direcao
+		strcpy(trans[i].IAtual,a2);
+		strcpy(trans[i].ProxState,a3);
+		strcpy(trans[i].Escr,a4);
+		strcpy(trans[i].Dir,a5);
+		
+	}
+	int qtdTransition = i;
+	
+	//Aloca na maquina de turing
 	while((c = fgetc(transition)) != EOF) {
 		if(c == '\n') {
 			MoveWriteHeadRight(t,SEP_TRANS);
@@ -96,9 +133,6 @@ int main(int argc, char *argv[]) {
 	
 	//Divide info
 	
-	//Variable
-	char states[MAX_VARIABLE];
-	char alfa [MAX_VARIABLE];
 	
 	//States
 	
@@ -123,11 +157,17 @@ int main(int argc, char *argv[]) {
 		i++;
 	}
 	alfa[i] = '\0';
-	printf("%s",alfa);
 	
-	//Debug(t);
+	while(Read(t) != SEPARATOR) {
+		MoveHeadRight(t);
+	}
+	
+	TuringMachine * t2 = Create();
 	
 	
+	Debug(t);
+	
+	  
 	
 	getchar();
 	
