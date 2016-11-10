@@ -5,7 +5,7 @@ typedef struct machineturing TuringMachine;
 TuringMachine * Create();
 
 //Commands
-void LoadData(TuringMachine * tm, char * data, int data_size);
+void LoadData(TuringMachine * tm, char * data);
 void ResetHead(TuringMachine * tm);
 void ClearTape(TuringMachine * tm);
 
@@ -22,3 +22,9 @@ void Write(TuringMachine * tm, char value);
 
 //Print
 void PrintTape(TuringMachine * tm);
+
+//Getters
+int getState(TuringMachine * tm);
+
+//Setters
+void setState(TuringMachine * tm, int state);

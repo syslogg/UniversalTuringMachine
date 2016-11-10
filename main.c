@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
 	while(fgets(buffer,sizeof(buffer),transition2) != NULL ) {
 		sscanf(buffer, "%[^'&']&%[^'&']&%[^'&']&%[^'&']&%s\n",a1,a2,a3,a4,a5); //0&s&d&1&>
 		
-		strcpy(trans[i].EstAtual,a1); //EstadoAtual&Entrada&EstadoDest&Escreve&Direcao
+		strcpy(trans[i].EstAtual,a1); 
 		strcpy(trans[i].IAtual,a2);
 		strcpy(trans[i].ProxState,a3);
 		strcpy(trans[i].Escr,a4);
@@ -162,10 +162,22 @@ int main(int argc, char *argv[]) {
 		MoveHeadRight(t);
 	}
 	
+	//Leitura de transições
 	TuringMachine * t2 = Create();
 	
+	//Logica de maquina de turing
 	
-	Debug(t);
+	LoadData(t2, input);
+	
+	bool termina = false;
+	
+	int state = getState(t2);
+	
+	while(termina){
+		
+	}
+	
+	Debug(t2);
 	
 	  
 	

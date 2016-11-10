@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "Turing.h"
 
 #define TAM_MAX 1000
@@ -28,11 +29,11 @@ TuringMachine * Create() {
 }
 
 /*----------- Comands -----------*/
-void LoadData(TuringMachine * tm, char * data, int data_size) {
-	int head = tm->head, i, lenght = data_size;
+void LoadData(TuringMachine * tm, char * data) {
+	int head = tm->head, i;
 	ClearTape(tm);
 	
-	for(i = 0; i < lenght; i++){
+	for(i = 0; i < strlen(data); i++){
 		tm->tape[head++] = data[i];
 	}
 }
@@ -88,6 +89,16 @@ void PrintTape(TuringMachine * tm) {
 	}
 	printf("]\n\n");
 	
+}
+
+/* ------------ Getters -------------- */
+
+int getState(TuringMachine * tm){
+	return tm->state;
+}
+
+void setState(TuringMachine * tm, int state){
+	tm->state = state;
 }
 
 void Encode(TuringMachine * tm) {
