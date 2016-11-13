@@ -74,7 +74,7 @@ char Read(TuringMachine * tm) {
 }
 
 void Write(TuringMachine * tm, char value) {
-	tm->tape[tm->head] = (value != 1 && value != 0 && value != BLANK ? tm->tape[tm->head] : value);
+	tm->tape[tm->head] = value;
 }
 
 void PrintTape(TuringMachine * tm) {

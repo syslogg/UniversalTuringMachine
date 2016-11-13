@@ -4,6 +4,7 @@
 
 #define SEPARATOR '$'
 #define SEP_TRANS '&'
+#define BLANK 254
 
 #define MAX_VARIABLE 64
 
@@ -54,11 +55,11 @@
 
 */
 struct transition {
-	char EstAtual[MAX_VARIABLE];
-	char IAtual[MAX_VARIABLE];
-	char Escr[MAX_VARIABLE];
-	char ProxState[MAX_VARIABLE];
-	char Dir[MAX_VARIABLE];
+	int EstAtual;
+	char IAtual;
+	char Escr;
+	int ProxState;
+	char Dir;
 };
 typedef struct transition Transition;
 
@@ -90,18 +91,61 @@ int main(int argc, char *argv[]) {
 	
 	//Aloca na variavel as transições
 	i = 0;
-	char buffer[MAX_VARIABLE], a1[MAX_VARIABLE], a2[MAX_VARIABLE], a3[MAX_VARIABLE], a4[MAX_VARIABLE], a5[MAX_VARIABLE];
+	char buffer[MAX_VARIABLE], a1, a2, a3, a4, a5, aa[5];
 	while(fgets(buffer,sizeof(buffer),transition2) != NULL ) {
-		sscanf(buffer, "%[^'&']&%[^'&']&%[^'&']&%[^'&']&%s\n",a1,a2,a3,a4,a5); //0&s&d&1&>
 		
-		strcpy(trans[i].EstAtual,a1); 
-		strcpy(trans[i].IAtual,a2);
-		strcpy(trans[i].ProxState,a3);
-		strcpy(trans[i].Escr,a4);
-		strcpy(trans[i].Dir,a5);
+		//sscanf(buffer, "%[^'&']&%[^'&']&%[^'&']&%[^'&']&%c\n",&a1,&a2,&a3,&a4,&a5); //0&s&d&1&>
+		
+		char * token = strtok(buffer,"&");
+		a1 = token[0];
+		token = strtok(NULL, "&");
+		a2 = token[0];
+		token = strtok(NULL, "&");
+		a3 = token[0];
+		token = strtok(NULL, "&");
+		a4 = token[0];
+		token = strtok(NULL, "&");
+		a5 = token[0];
+		
+		/*int js = 0;
+		while(token != NULL) {
+			aa[js] = token[0];
+			token = strtok(NULL, "&");
+			js++;
+		}*/
+				
+		//printf("1%s 2%c 3%s 4%c 5%c\n", a1,a2,a3,a4,a5);
+		//printf("1-|%c| 2-|%c| 3-|%c| 4-|%c| 5-|%c|\n",a1, a2,a3,a4,a5);
+		//printf("%c\n", a1);
+		
+	//	printf("8(q%d, %c) = (q%d, %c, %c);\n", trans[i].EstAtual);
+		
+		int EstAtual = a1 - '0';
+		trans[i].EstAtual = EstAtual;
+		
+		char InAtual = a2 == '#' ? BLANK : a2;
+		trans[i].IAtual = InAtual;
+		
+		int ProxEst = a3 - '0';
+		trans[i].ProxState = ProxEst;
+		
+		int Escr = a4 == '#' ? BLANK : a4;
+		trans[i].Escr = Escr;
+		
+		trans[i].Dir = a5;
+		
+		//printf("8(q%d, %c) = (q%d, %c, %c);\n",trans[i].EstAtual,trans[i].IAtual,trans[i].ProxState, trans[i].Escr, trans[i].Dir);
+		
+		
+		
+		//trans[i].Escr = a4 == '#' ? BLANK : a4;
+		i++;
+		//PrintTransition(trans[i]);
+		//printf("8(q%d, %c) = (q%d, %c, %c);\n", trans[i].EstAtual,trans[i].IAtual,trans[i].ProxState,trans[i].Escr,trans[i].Dir);
 		
 	}
 	int qtdTransition = i;
+	
 	
 	//Aloca na maquina de turing
 	while((c = fgetc(transition)) != EOF) {
@@ -170,11 +214,85 @@ int main(int argc, char *argv[]) {
 	LoadData(t2, input);
 	
 	bool termina = false;
+	bool func = false;
 	
 	int state = getState(t2);
 	
-	while(termina){
+	//Debug(t2);
+	
+	//printf("%d", !termina);
+	/*
+	i = 0;
+	for(i  = 0; i <  qtdTransition; i++) {
+		PrintTransition(trans[i]);
+	}
+	*/
+	
+	Transition * atual = NULL;
+	while(!termina){
+		i = 0;
+		atual = NULL;
+		//Pesquisar transacao
+		for (i = 0; i < qtdTransition; i++) {
+			//Percorre todas as transações
+			if(trans[i].EstAtual == state) {
+				//Estado atual encontrado
+				
+				if(trans[i].IAtual == Read(t2)) {
+					//Input atual encontrado
+					atual = &trans[i];
+				} 
+			}
+		}
 		
+		//PrintTransition(*atual);
+		//getch();
+		//Imprimir transicao atual
+		//Processamento do estado atual
+		
+		if(atual == NULL) {
+			//Não encontrou transição para situação atual
+			//Maquina quebrou
+			
+			printf("Caiu aqui");
+			getch();
+			termina = true;
+			func = false;
+			
+		} else {
+			system("cls");
+			PrintTape(t2);
+			Write(t2, atual->Escr);
+			printf("\nEstado atual: |%d|\n", state);
+			printf("\nEscreve atual: |%c|\n",atual->Escr);
+			setState(t2, atual->ProxState);
+			state = getState(t2);
+			
+			
+			printf("Proximo estado: |%d|\n", state);
+			
+			PrintTransition(*atual);
+			
+			getch();
+			
+			//Direção
+			switch(atual->Dir) {
+				case '>':
+					MoveHeadRight(t2);
+					break;
+				case '<':
+					MoveHeadLeft(t2);
+					break;
+				case 'H':
+					//Maquina entrou em HALT
+					termina = true;
+					func = true;
+					getch();
+					break;
+			}
+			
+		}
+			
 	}
 	
 	Debug(t2);
@@ -203,7 +321,18 @@ void Debug (TuringMachine * tm) {
 	
 }
 
-
+void PrintTransition(Transition t) {
+	//printf("8(q%d, %c) = (q%d, %c, %c);\n", t.EstAtual, t.IAtual, t.ProxState,  t.Escr, t.Dir);
+	printf("8(q%d, %c) = (q%d, %c, %c);\n",t.EstAtual,t.IAtual,t.ProxState, t.Escr, t.Dir);
+	/*
+	int EstAtual;
+	char IAtual;
+	char Escr;
+	int ProxState;
+	char Dir;
+	*/
+	
+}
 
 
 
