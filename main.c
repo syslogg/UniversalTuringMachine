@@ -72,6 +72,7 @@ int main(int argc, char *argv[]) {
 	//Variable
 	char states[MAX_VARIABLE];
 	char alfa[MAX_VARIABLE];
+	char alfaFita[MAX_VARIABLE];
 	Transition trans[MAX_VARIABLE];
 	
 	
@@ -87,6 +88,30 @@ int main(int argc, char *argv[]) {
 	while((c = fgetc(turing)) != EOF) {
 		MoveWriteHeadRight(t,c);
 	}
+	MoveWriteHeadRight(t,SEPARATOR);
+	ResetHead(t);
+	
+	
+	
+	while(Read(t) != SEPARATOR) {
+		MoveHeadRight(t);
+	}
+	MoveHeadRight(t);
+	
+	
+	while(Read(t) != SEPARATOR) {
+		MoveHeadRight(t);
+	}
+	MoveHeadRight(t);
+	
+	i = 0;
+	while(Read(t) != SEPARATOR) {
+		alfaFita[i] = Read(t);
+		MoveHeadRight(t);
+		i++;
+	}
+	alfaFita[i] = '\0';
+	
 	
 	
 	//Aloca na variavel as transições
@@ -158,37 +183,71 @@ int main(int argc, char *argv[]) {
 		
 	}
 	MoveWriteHeadRight(t,SEPARATOR);
+
+	
 	
 	//Processar input
-	printf("Digite um INPUT de acordo com o alfabeto configurado: \n");
+	printf("Digite um INPUT de acordo com o alfabeto configurado (%s): \n",alfaFita);
 	
 	char input[MAX_VARIABLE];
 	
 	scanf("%s",input);
+	
+	bool valid = true;
+	int n;
+	for(i = 0; i < strlen(input); i++) {
+		char car = input[i];
+		bool validCar = false;
+		for(n = 0; n < strlen(alfaFita); n++) {
+			if(alfaFita[n] == car) {
+				validCar = true;
+			}
+		}
+		if(validCar == false) {
+			valid = false;
+		}
+		break;
+		
+	}
+	
+	if(valid == false) {
+		system("cls");
+		printf("Input diferente com alfabeto da fita configurado!");
+		printf("\nAlfabeto atual: %s", alfaFita);
+		return 1;
+	}
 	
 	for(i = 0; i < strlen(input); i++) {
 		MoveWriteHeadRight(t,input[i]);
 	}
 	MoveWriteHeadRight(t,SEPARATOR);
 	
+	
+	
+	
+	
 	//Reset Head
 	ResetHead(t);
 	
-	
+	while (Read(t) != SEPARATOR) {
+		//states[i] = Read(t);
+		MoveHeadRight(t);
+		//i++;
+	}
 	//Divide info
 	
 	
 	//States
 	
-	i = 0;
+	//i = 0;
 	
-	while (Read(t) != SEPARATOR) {
+/*	while (Read(t) != SEPARATOR) {
 		states[i] = Read(t);
 		MoveHeadRight(t);
 		i++;
 	}
 	states[i] = '\0';
-	
+	*/
 	//printf("%s",states);
 	MoveHeadRight(t);
 	
@@ -205,6 +264,16 @@ int main(int argc, char *argv[]) {
 	while(Read(t) != SEPARATOR) {
 		MoveHeadRight(t);
 	}
+	
+	while(Read(t) != SEPARATOR) {
+		MoveHeadRight(t);
+	}
+	
+	for (i = 0; i < strlen(input); i++) {
+		MoveHeadRight(t);
+	}
+	
+	MoveHeadRight(t);
 	
 	//Leitura de transições
 	TuringMachine * t2 = Create();
@@ -254,13 +323,14 @@ int main(int argc, char *argv[]) {
 			//Não encontrou transição para situação atual
 			//Maquina quebrou
 			
-			printf("Caiu aqui");
+			printf("Nao foi encontrado funcao de transicao para estado q%d e \"input\" %c. Maquina parou aqui", state, Read(t2));
 			getch();
 			termina = true;
 			func = false;
 			
 		} else {
 			system("cls");
+			PrintTape(t);
 			PrintTape(t2);
 			Write(t2, atual->Escr);
 			printf("\nEstado atual: |%d|\n", state);
@@ -294,8 +364,35 @@ int main(int argc, char *argv[]) {
 		}
 			
 	}
+	system("cls");
+	if(func == true) {
+		
+		//PrintTape(t2);
+		MoveHeadLeft(t2);
+		while(Read(t2) != (char)BLANK) {
+			PrintTape(t);
+			PrintTape(t2);
+			MoveHeadLeft(t2);
+			
+			
+			getch();
+			system("cls");
+		}
+		
+		MoveHeadRight(t2);
+		MoveHeadRight(t);
+		while(Read(t2) != (char) BLANK) {
+			
+			MoveWriteHeadRight(t,(char)Read(t2));
+			PrintTape(t);
+			PrintTape(t2);
+			MoveHeadRight(t2);
+			getch();
+			system("cls");
+		}
+	}
 	
-	Debug(t2);
+	Debug(t);
 	
 	  
 	
