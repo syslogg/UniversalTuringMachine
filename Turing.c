@@ -3,7 +3,7 @@
 #include <string.h>
 #include "Turing.h"
 
-#define TAM_MAX 1000
+#define TAM_MAX 2000
 #define RANGE_TAPE 10
 #define BLANK 254
 #define SEPARATOR '$'
@@ -75,6 +75,22 @@ char Read(TuringMachine * tm) {
 
 void Write(TuringMachine * tm, char value) {
 	tm->tape[tm->head] = value;
+}
+
+char * GetTape(TuringMachine * tm) {
+	
+	int i, c = 0;
+	char str[TAM_MAX];
+	for (i = 0; i < TAM_MAX; i++) {
+		if(tm->tape[i] != (char) BLANK) {
+			str[c] = tm->tape[i];
+			c++;
+		}
+	}
+	str[c++] = '\0';
+	
+	return str;
+	
 }
 
 void PrintTape(TuringMachine * tm) {

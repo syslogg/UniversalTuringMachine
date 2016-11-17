@@ -19,6 +19,7 @@ void MoveWriteHeadRight(TuringMachine * tm, char value);
 //Operation
 char Read(TuringMachine * tm);
 void Write(TuringMachine * tm, char value);
+char * GetTape(TuringMachine * tm);
 
 //Print
 void PrintTape(TuringMachine * tm);

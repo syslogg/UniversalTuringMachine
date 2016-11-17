@@ -12,8 +12,6 @@
 #define true 1
 #define false 0
 
-/* run this program using the console pauser or add your own getch, system("pause") or input loop */
-
 /* -- Codification:
 		- 0 to 00
 		- 1 to 01
@@ -63,6 +61,8 @@ struct transition {
 };
 typedef struct transition Transition;
 
+int Codification (char * c);
+
 int main(int argc, char *argv[]) {
 
 	FILE * turing = fopen("TM/turing.txt","r");
@@ -75,12 +75,10 @@ int main(int argc, char *argv[]) {
 	char alfaFita[MAX_VARIABLE];
 	Transition trans[MAX_VARIABLE];
 	
+	int i;
 	
-	//Mapping
-	int mapping[256], a = 'a', z = 'z', i;
-	for(i = a; i <= z; i++) {
-		mapping[i] = i - a;
-	}
+	
+	
 	
 	
 	TuringMachine * t = Create();
@@ -323,7 +321,7 @@ int main(int argc, char *argv[]) {
 			//Não encontrou transição para situação atual
 			//Maquina quebrou
 			
-			printf("Nao foi encontrado funcao de transicao para estado q%d e \"input\" %c. Maquina parou aqui", state, Read(t2));
+			printf("Nao foi encontrado funcao de transicao para estado q%d e \"input\" %c ou foi processado um input que não existe no alfabeto da fita.", state, Read(t2));
 			getch();
 			termina = true;
 			func = false;
@@ -403,9 +401,19 @@ int main(int argc, char *argv[]) {
 
 void Debug (TuringMachine * tm) {
 	//Debug
+	
+	char binary[MAX_VARIABLE];
+	int decimal;
+	
+	//printf("%s",GetTape(tm));
+	
 	while(1) {
 		char d;
 		PrintTape(tm);
+		itoa(Codification(GetTape(tm)),binary,2);
+		//printf("\nNumero da fita (decimal): %s\n",  binary);
+		printf("Numero da fita (decimal): %d\n",Codification(GetTape(tm)));
+		
 		
 		scanf("%c",&d);
 		if(d == '>')
@@ -428,6 +436,65 @@ void PrintTransition(Transition t) {
 	int ProxState;
 	char Dir;
 	*/
+	
+}
+
+int Codification (char * c) {
+	
+	int soma = 0;
+	
+	int i = 0, ca = 0, b;
+	
+	//Mapping
+	int mapping[256], a = 'a', z = 'z';
+	
+	for(i = 0; i < 256; i++) {
+		mapping[i] = -1;
+	}
+	
+	for(i = a; i <= z; i++) {
+		mapping[i] = i - a;
+		
+	}
+	
+	mapping['0'] = i - a;
+	mapping['1'] = i - a + 1;
+	mapping['2'] = i - a + 2;
+	mapping['3'] = i - a + 3;
+	mapping['4'] = i - a + 4;
+	mapping['5'] = i - a + 5;
+	mapping['6'] = i - a + 6;
+	mapping['7'] = i - a + 7;
+	mapping['8'] = i - a + 8;
+	mapping['9'] = i - a + 9;
+	
+	mapping[SEPARATOR] = i - a + 10;
+	mapping[SEP_TRANS] = i - a + 11;
+	mapping['H'] = i - a + 12;
+	
+	while(*(c + i) != '\0') {
+	
+		char buf = *(c+i);
+		int number = mapping[buf];
+		if(number != -1) {
+			
+			/*char binnary[256];
+			itoa(number,binnary,2);
+			
+			for(b = 0; binnary[b] != '\0'; b++) {
+				code[ca++] = binnary[b];
+			}
+			*/
+			soma += number;
+			
+		} else {
+			return -1;
+		}
+		i++;
+		
+	}
+	//code[ca] = '\0';
+	return soma;
 	
 }
 
